@@ -1,0 +1,85 @@
+qtconsole() {
+    if ! command -v jupyter &>/dev/null; then
+        conda activate
+        jupyter qtconsole --JupyterWidget.gui_completion=droplist --JupyterWidget.buffer_size=-1
+        conda deactivate
+    else
+        jupyter qtconsole --JupyterWidget.gui_completion=droplist --JupyterWidget.buffer_size=-1
+    fi
+}
+
+adbwsetup() {
+    adb shell setprop service.adb.tcp.port 4444
+    adb tcpip 4444
+}
+
+rbinit() {
+    if rbenv local; then
+        echo "Activating rbenv"
+        eval "$(rbenv init -)"
+        local_rbver=$(rbenv local)
+        echo "Adding ~/.gem/ruby/${local_rbver:0:3}.0/bin to PATH"
+        export PATH="$HOME/.gem/ruby/${local_rbver:0:3}.0/bin:$PATH"
+    fi
+}
+
+krypton() {
+    if [ -f ~/.ssh/id_ed_krypton ]; then
+        eval $(ssh-agent -s) >/dev/null
+        ssh-add -K ~/.ssh/id_ed_krypton >/dev/null 2>&1
+        ssh akshobg@krypton.local -i ~/.ssh/id_ed_krypton
+    else
+        echo "Krypton key not found"
+    fi
+}
+
+mercury() {
+    if [ -f ~/.ssh/id_ed_mercury ]; then
+        eval $(ssh-agent -s) >/dev/null
+        ssh-add -K ~/.ssh/id_ed_mercury >/dev/null 2>&1
+        ssh akshobg@mercury.local -i ~/.ssh/id_ed_mercury
+    else
+        echo "Mercury key not found"
+    fi
+}
+
+osmc() {
+    if [ -f ~/.ssh/id_ed_osmc ]; then
+        eval $(ssh-agent -s) >/dev/null
+        ssh-add -K ~/.ssh/id_ed_osmc >/dev/null 2>&1
+        ssh osmc@osmc.local -i ~/.ssh/id_ed_osmc
+    else
+        echo "OSMC key not found"
+    fi
+}
+
+github() {
+    if [ -f ~/.ssh/id_ed_github ]; then
+        eval $(ssh-agent -s) >/dev/null
+        ssh-add -K ~/.ssh/id_ed_github >/dev/null 2>&1
+    else
+        echo "Github key not found"
+    fi
+}
+
+euler() {
+    cd ~/Projects/projecteuler
+}
+
+ghe() {
+    if [ -f ~/.ssh/id_ed_ghe ]; then
+        eval $(ssh-agent -s) >/dev/null
+        ssh-add -K ~/.ssh/id_ed_ghe >/dev/null 2>&1
+    else
+        echo "GitHub Enterprise key not found"
+    fi
+}
+
+vsts() {
+    if [ -f ~/.ssh/id_rsa_vsts ]; then
+        eval $(ssh-agent -s) >/dev/null
+        ssh-add -K ~/.ssh/id_rsa_vsts >/dev/null 2>&1
+    else
+        echo "Visual Studio Online key not found"
+    fi
+}

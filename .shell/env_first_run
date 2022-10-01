@@ -1,0 +1,102 @@
+setuppasswordlessssh() {
+    hostname=$(scutil --get ComputerName)
+    echo "Enter the details to setup passwordless ssh"
+    echo "Enter username of your remote machine"
+    read username
+    echo "Enter remote machine name (not the address). Ex: hydrogen, helium, etc."
+    read machinename
+    ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed_${machinename} -C "${USER}@${hostname}" -q -N ''
+    echo "Enter ${machinename}'s address. Ex: mercury.local, krypton.guest.corp.microsoft.com, etc."
+    read machineaddress
+    cat ~/.ssh/id_ed_${machinename}.pub | ssh ${username}@${machineaddress} "cat >> ~/.ssh/authorized_keys"
+    echo "More machine to setup? (y/n)"
+    read moremachines
+    if [ "$moremachines" = "y" ]; then
+        setuppasswordlessssh
+    fi
+}
+
+setupssh() {
+    mkdir ~/.ssh
+    hostname=$(scutil --get ComputerName)
+
+    echo "Do you want to setup Github key? (y/n)"
+    read answer
+    if [ "$answer" = "y" ]; then
+        ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed_github -C "${USER}@${hostname}" -q -N ''
+        echo "Github key generated. Press enter to open github"
+        read
+        pbcopy <~/.ssh/id_ed_github.pub
+        open https://github.com/settings/keys
+    fi
+
+    echo "Do you want to setup Github Enterprise key? (y/n)"
+    read answer
+    if [ "$answer" = "y" ]; then
+        ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed_ghe -C "${USER}@${hostname}" -q -N ''
+        echo "Github Enterprise key generated. Press enter to open ghe"
+        read
+        pbcopy <~/.ssh/id_ed_ghe.pub
+        open https://ghe-us.microsoft.com/settings/keys
+    fi
+
+    echo "Do you want to setup VSTS key? (y/n)"
+    read answer
+    if [ "$answer" = "y" ]; then
+        ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_vsts -C "$USER@${hostname}" -q -N ''
+        echo "Visual Studio key generated. Press enter to open vsts"
+        read
+        pbcopy <~/.ssh/id_rsa_vsts.pub
+        open https://office.visualstudio.com/_usersSettings/keys
+    fi
+
+    echo "Do you want to setup passwordless ssh to a different machine? (y/n)"
+    read answer
+    if [ "$answer" = "y" ]; then
+        setuppasswordlessssh
+    fi
+}
+
+initialsetup() {
+    echo "Installing homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    set_homebrew_prefix
+    evaluate_brew
+
+    echo "Checking brew installation"
+    which -s brew
+    if [[ $? != 0 ]]; then
+        echo "brew installation failed. Please fix the errors and run initalsetup again"
+        exit 1
+    else
+        echo "Success! Continuing..."
+    fi
+
+    echo "Installing useful brew packages"
+    # coreutils - https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x/21118126#21118126
+    # act - https://github.com/nektos/act
+    brew install wget telnet ruby mvn go coreutils xmlstarlet act tree rustup-init az minikube kubectl kustomize
+
+    brew install --cask iterm2 visual-studio-code docker android-studio
+    brew install --cask anaconda
+
+    echo "Initializing rustup"
+    rustup-init -y --no-modify-path
+
+    echo "Initializing anaconda"
+    $(brew --prefix)/anaconda3/bin/conda init $(echo $SHELL | cut -d '/' -f3)
+    $(brew --prefix)/anaconda3/bin/conda config --set auto_activate_base false
+
+    echo "Do you want to open JDK11 installation page? (y/n)"
+    read answer
+    if [ "$answer" = "y" ]; then
+        open https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html
+    fi
+
+    echo "Do you want to setup ssh? (y/n)"
+    read answer
+    if [ "$answer" = "y" ]; then
+        setupssh
+    fi
+}

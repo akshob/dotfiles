@@ -1,0 +1,15 @@
+# put your aliases here
+alias tailf="tail -f"
+alias ll="ls -l"
+alias git-lblob="git rev-list --all --objects | git cat-file --batch-check='%(objectname) %(objecttype) %(objectsize) %(rest)' | grep blob | sort -k3nr | head -n 20"
+alias adb-restart="adb kill-server && adb start-server"
+alias pick="git cherry-pick -n"
+alias commit="git commit --no-edit"
+
+# https://github.com/wtakuo/xv6-env
+alias xv6-create="docker run --name xv6 -dt -v $HOME/Projects/pdos-mit:/home/xv6/xv6-riscv wtakuo/xv6-env"
+alias xv6-create-arm64="docker --name xv6-arm64 run -dt -v $HOME/Projects/pdos-mit:/home/xv6/xv6-riscv wtakuo/xv6-env-arm64"
+alias xv6-create-amd64="docker --name xv6-amd64 run -dt -v $HOME/Projects/pdos-mit:/home/xv6/xv6-riscv wtakuo/xv6-env-amd64"
+alias xv6="docker exec -it xv6 bash"
+alias xv6-arm64="docker exec -it xv6-arm64 bash"
+alias xv6-amd64="docker exec -it xv6-amd64 bash"

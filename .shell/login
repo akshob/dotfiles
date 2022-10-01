@@ -1,0 +1,54 @@
+# Put your environment variables here
+
+set_homebrew_prefix() {
+    if [ -f "/usr/local/bin/brew" ]; then
+        export HOMEBREW_PREFIX="/usr/local"
+    elif [ -f "/opt/homebrew/bin/brew" ]; then
+        export HOMEBREW_PREFIX="/opt/homebrew"
+    fi
+}
+
+set_homebrew_prefix
+
+evaluate_brew() {
+    eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
+}
+
+# Disable homebrew analytics - https://docs.brew.sh/Analytics
+export HOMEBREW_NO_ANALYTICS=1
+
+if [ "$HOMEBREW_PREFIX" != "" ]; then
+    evaluate_brew
+
+    pathprepend $HOMEBREW_PREFIX/bin/gcc PATH
+    pathappend $HOMEBREW_PREFIX/anaconda3/bin PATH
+
+    rv=$($HOMEBREW_PREFIX/opt/ruby/bin/ruby -v)
+    pathprepend $HOMEBREW_PREFIX/opt/ruby/bin:/usr/local/lib/ruby/gems/${rv:5:3}.0/bin PATH
+fi
+
+if [ -d "/Users/$USER/Library/Android/sdk" ]; then
+    export ANDROID_HOME=/Users/$USER/Library/Android/sdk
+    pathappend ${ANDROID_HOME}/emulator PATH
+    pathappend ${ANDROID_HOME}/tools/bin PATH
+    pathappend ${ANDROID_HOME}/platform-tools PATH
+    VERSION=$(ls -1 $ANDROID_HOME/build-tools | sort -r | head -1)
+    pathappend ${ANDROID_HOME}/build-tools/${VERSION} PATH
+fi
+
+if [ -d "$HOME/.cargo/bin" ]; then
+    pathappend $HOME/.cargo/bin PATH
+fi
+
+/usr/libexec/java_home > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+    export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8.0)
+    export JAVA_11_HOME=$(/usr/libexec/java_home -v11)
+    export JAVA_HOME=$(/usr/libexec/java_home)
+fi
+
+ssource ~/.shell/login_utils
+
+# The current directory should never be in $PATH
+pathremove . PATH
+pathremove "" PATH
