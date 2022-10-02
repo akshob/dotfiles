@@ -1,0 +1,45 @@
+#!/bin/bash
+
+secret_filename="$HOME/.shell/login_secret"
+INCLUDE_DIR="../include"
+if [[ "$1" != "" ]]; then
+    INCLUDE_DIR=$1
+fi
+
+echo "Coping dotfiles from $1 to $HOME"
+
+cp -R $1/.bash $HOME/
+cp -R $1/.sh $HOME/
+cp -R $1/.shell $HOME/
+cp -R $1/.zsh $HOME/
+cp $1/.bash_logout $HOME/
+cp $1/.bash_profile $HOME/
+cp $1/.bashrc $HOME/
+cp $1/.profile $HOME/
+cp $1/.zshenv $HOME/
+cp $1/.zshrc $HOME/
+
+echo "dotfiles copied"
+
+fill_login_secret() {
+    echo "Curling contents of url '$1' and appending it to '$secret_filename'"
+    curl -fsL -w '\n' "$1" >> $secret_filename
+}
+
+filename="$1/.secret_links"
+if [ -r "$filename" ]; then
+    echo "Found secret links file"
+    echo "Cleaning $secret_filename"
+    rm $secret_filename
+    touch $secret_filename
+    regex='(https?|ftp|file)://[-[:alnum:]\+&@#/%?=~_|!:,.;]*[-[:alnum:]\+&@#/%=~_|]'
+    while read line; do
+        if [[ $line =~ $regex ]]
+        then 
+            echo "Valid link: $line"
+            fill_login_secret $line
+        else
+            echo "Invalid link: $line"
+        fi
+    done <$filename
+fi

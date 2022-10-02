@@ -47,7 +47,9 @@ if [ $? -eq 0 ]; then
     export JAVA_HOME=$(/usr/libexec/java_home)
 fi
 
+ssource ~/.shell/login_first_run
 ssource ~/.shell/login_utils
+ssource ~/.shell/login_secret
 
 # The current directory should never be in $PATH
 pathremove . PATH
