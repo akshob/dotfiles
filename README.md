@@ -33,7 +33,9 @@ If you feel something can be done better, or you have suggestions, please open a
 - [Unix shell initialization](https://github.com/pyenv/pyenv/wiki/Unix-shell-initialization)
 - https://unix.stackexchange.com/a/541092
 - [Shell startup scripts](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html)
+- https://unix.stackexchange.com/a/8658
+- [Understanding the bin, sbin, usr/bin , usr/sbin split](http://lists.busybox.net/pipermail/busybox/2010-December/074114.html)
 
 ## Credits
 
-Credits to [flowblok](https://github.com/flowblok)
+[flowblok](https://github.com/flowblok)
