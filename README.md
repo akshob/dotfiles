@@ -29,6 +29,11 @@ Enjoy!
 
 If you feel something can be done better, or you have suggestions, please open an issue or submit a PR!
 
+## Resources
+- [Unix shell initialization](https://github.com/pyenv/pyenv/wiki/Unix-shell-initialization)
+- https://unix.stackexchange.com/a/541092
+- [Shell startup scripts](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html)
+
 ## Credits
 
 Credits to [flowblok](https://github.com/flowblok)
