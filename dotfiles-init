@@ -1,23 +1,24 @@
 #!/bin/bash
 
 secret_filename="$HOME/.shell/login_secret"
-INCLUDE_DIR="../include"
+script_home=$(dirname $(realpath "$0"))
+source_dir=$(realpath "$script_home/../include")
 if [[ "$1" != "" ]]; then
-    INCLUDE_DIR=$1
+    source_dir=$1
 fi
 
-echo "Coping dotfiles from $1 to $HOME"
+echo "Coping dotfiles from $source_dir to $HOME"
 
-cp -R $1/.bash $HOME/
-cp -R $1/.sh $HOME/
-cp -R $1/.shell $HOME/
-cp -R $1/.zsh $HOME/
-cp $1/.bash_logout $HOME/
-cp $1/.bash_profile $HOME/
-cp $1/.bashrc $HOME/
-cp $1/.profile $HOME/
-cp $1/.zshenv $HOME/
-cp $1/.zshrc $HOME/
+cp -R $source_dir/.bash $HOME/
+cp -R $source_dir/.sh $HOME/
+cp -R $source_dir/.shell $HOME/
+cp -R $source_dir/.zsh $HOME/
+cp $source_dir/.bash_logout $HOME/
+cp $source_dir/.bash_profile $HOME/
+cp $source_dir/.bashrc $HOME/
+cp $source_dir/.profile $HOME/
+cp $source_dir/.zshenv $HOME/
+cp $source_dir/.zshrc $HOME/
 
 echo "dotfiles copied"
 
@@ -26,11 +27,11 @@ fill_login_secret() {
     curl -fsL -w '\n' "$1" >> $secret_filename
 }
 
-filename="$1/.secret_links"
+filename="$HOME/.secret_links"
 if [ -r "$filename" ]; then
     echo "Found secret links file"
     echo "Cleaning $secret_filename"
-    rm $secret_filename
+    rm $secret_filename || :
     touch $secret_filename
     regex='(https?|ftp|file)://[-[:alnum:]\+&@#/%?=~_|!:,.;]*[-[:alnum:]\+&@#/%=~_|]'
     while read line; do
