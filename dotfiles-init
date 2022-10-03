@@ -18,6 +18,7 @@ cp $source_dir/.bash_profile $HOME/
 cp $source_dir/.bashrc $HOME/
 cp $source_dir/.profile $HOME/
 cp $source_dir/.zshenv $HOME/
+cp $source_dir/.zprofile $HOME/
 cp $source_dir/.zshrc $HOME/
 
 echo "dotfiles copied"
