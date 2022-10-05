@@ -4,7 +4,7 @@ set -euo pipefail
 # You can run it from any directory.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-$DIR/dotfiles-init .
+$DIR/../dotfiles-init $DIR/..
 shellrc=."$(echo $SHELL | cut -d '/' -f3)"rc
 source $shellrc
 ll
@@ -13,4 +13,4 @@ if [ $? -ne 0 ]; then
 fi
 
 mkdir -p artifacts
-cp dotfiles-init "artifacts/dotfiles-init"
+cp $DIR/../dotfiles-init "artifacts/dotfiles-init"
