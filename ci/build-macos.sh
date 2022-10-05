@@ -19,7 +19,6 @@ set_homebrew_prefix
 
 eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
 
-brew install realpath
 brew install akshob/tools/dotfiles-init
 dotfiles-init
 shellrc=."$(echo $SHELL | cut -d '/' -f3)"rc

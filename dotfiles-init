@@ -1,25 +1,25 @@
 #!/bin/bash
 
 secret_filename="$HOME/.shell/login_secret"
-script_home=$(dirname $(realpath "$0"))
-source_dir=$(realpath "$script_home/../include")
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SOURCE_DIR=$(realpath "$DIR/../include")
 if [[ "$1" != "" ]]; then
-    source_dir=$1
+    SOURCE_DIR=$1
 fi
 
-echo "Coping dotfiles from $source_dir to $HOME"
+echo "Coping dotfiles from $SOURCE_DIR to $HOME"
 
-cp -R $source_dir/.bash $HOME/
-cp -R $source_dir/.sh $HOME/
-cp -R $source_dir/.shell $HOME/
-cp -R $source_dir/.zsh $HOME/
-cp $source_dir/.bash_logout $HOME/
-cp $source_dir/.bash_profile $HOME/
-cp $source_dir/.bashrc $HOME/
-cp $source_dir/.profile $HOME/
-cp $source_dir/.zshenv $HOME/
-cp $source_dir/.zprofile $HOME/
-cp $source_dir/.zshrc $HOME/
+cp -R $SOURCE_DIR/.bash $HOME/
+cp -R $SOURCE_DIR/.sh $HOME/
+cp -R $SOURCE_DIR/.shell $HOME/
+cp -R $SOURCE_DIR/.zsh $HOME/
+cp $SOURCE_DIR/.bash_logout $HOME/
+cp $SOURCE_DIR/.bash_profile $HOME/
+cp $SOURCE_DIR/.bashrc $HOME/
+cp $SOURCE_DIR/.profile $HOME/
+cp $SOURCE_DIR/.zshenv $HOME/
+cp $SOURCE_DIR/.zprofile $HOME/
+cp $SOURCE_DIR/.zshrc $HOME/
 
 echo "dotfiles copied"
 
