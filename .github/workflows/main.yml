@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  e2e-integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Docker Layer Cache
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - name: E2E Integration Tests
+        timeout-minutes: 15
+        run: ci/e2e-integration-tests.sh
