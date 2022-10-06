@@ -1,4 +1,7 @@
 # dotfiles
+
+[![CI](https://github.com/akshob/dotfiles/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/akshob/dotfiles/actions/workflows/main.yml)
+
 ## Introduction
 
 This repository is a collection of shell startup file based on the analysis [here](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html)
