@@ -9,10 +9,10 @@ fi
 
 echo "Coping dotfiles from $SOURCE_DIR to $HOME"
 
-cp -R $SOURCE_DIR/.bash $HOME/
-cp -R $SOURCE_DIR/.sh $HOME/
-cp -R $SOURCE_DIR/.shell $HOME/
-cp -R $SOURCE_DIR/.zsh $HOME/
+cp -LR $SOURCE_DIR/.bash $HOME/
+cp -LR $SOURCE_DIR/.sh $HOME/
+cp -LR $SOURCE_DIR/.shell $HOME/
+cp -LR $SOURCE_DIR/.zsh $HOME/
 cp $SOURCE_DIR/.bash_logout $HOME/
 cp $SOURCE_DIR/.bash_profile $HOME/
 cp $SOURCE_DIR/.bashrc $HOME/
