@@ -2,9 +2,9 @@
 
 secret_filename="$HOME/.shell/login_secret"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SOURCE_DIR="$DIR/../include"
-if [[ "$1" != "" ]]; then
-    SOURCE_DIR=$1
+SOURCE_DIR=$1
+if [ "$SOURCE_DIR" = "" ]; then
+    SOURCE_DIR=$(realpath "$DIR/../include")
 fi
 
 echo "Coping dotfiles from $SOURCE_DIR to $HOME"
