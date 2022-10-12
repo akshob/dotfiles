@@ -22,12 +22,14 @@ if [ "$HOMEBREW_PREFIX" != "" ]; then
 
     pathprepend $HOMEBREW_PREFIX/bin/gcc PATH
 
-    rv=$($HOMEBREW_PREFIX/opt/ruby/bin/ruby -v)
-    pathprepend $HOMEBREW_PREFIX/opt/ruby/bin:/usr/local/lib/ruby/gems/${rv:5:3}.0/bin PATH
-fi
+    if [ -r "$HOMEBREW_PREFIX/opt/ruby/bin/ruby" ]; then
+        rv=$($HOMEBREW_PREFIX/opt/ruby/bin/ruby -v)
+        pathprepend $HOMEBREW_PREFIX/opt/ruby/bin:/usr/local/lib/ruby/gems/${rv:5:3}.0/bin PATH
+    fi
 
-if [ -r "$HOMEBREW_PREFIX/anaconda3/etc/profile.d/conda.sh" ]; then
-    ssource $HOMEBREW_PREFIX/anaconda3/etc/profile.d/conda.sh
+    if [ -r "$HOMEBREW_PREFIX/anaconda3/etc/profile.d/conda.sh" ]; then
+        ssource $HOMEBREW_PREFIX/anaconda3/etc/profile.d/conda.sh
+    fi
 fi
 
 if [ -d "/Users/$USER/Library/Android/sdk" ]; then
