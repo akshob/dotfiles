@@ -58,19 +58,16 @@ setupssh() {
 }
 
 initialsetup() {
-    echo "Installing homebrew"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
     set_homebrew_prefix
     evaluate_brew
 
     echo "Checking brew installation"
     which -s brew
     if [[ $? != 0 ]]; then
-        echo "brew installation failed. Please fix the errors and run initalsetup again"
+        echo "brew not installed. Please install brew and run initalsetup again"
         exit 1
     else
-        echo "Success! Continuing..."
+        echo "Homebrew is installed! Continuing..."
     fi
 
     echo "Installing useful brew packages"
