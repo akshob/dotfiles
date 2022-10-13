@@ -17,7 +17,7 @@ setuppasswordlessssh() {
 }
 
 setupssh() {
-    mkdir ~/.ssh
+    mkdir -p ~/.ssh
     hostname=$(scutil --get ComputerName)
 
     echo "Do you want to setup Github key? (y/n)"
