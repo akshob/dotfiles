@@ -75,7 +75,7 @@ initialsetup() {
     # act - https://github.com/nektos/act
     brew install wget telnet ruby mvn go coreutils xmlstarlet act tree rustup-init az minikube kubectl kustomize hugo
 
-    brew install --cask iterm2 visual-studio-code docker android-studio firefox spectacle microsoft-edge google-chrome powershell
+    brew install --cask iterm2 visual-studio-code docker android-studio firefox spectacle microsoft-edge google-chrome powershell node
     brew install --cask anaconda
 
     echo "Initializing rustup"
