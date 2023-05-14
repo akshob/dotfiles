@@ -57,7 +57,22 @@ setupssh() {
     fi
 }
 
+setupmachinename() {
+    echo "Enter your machine name (Ex: mercury, krypton, etc.)"
+    read machinename
+    sudo scutil --set ComputerName ${machinename}
+    sudo scutil --set HostName ${machinename}
+    sudo scutil --set LocalHostName ${machinename}
+    sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string ${machinename}
+}
+
 initialsetup() {
+    echo "Do you want to setup computer name? (y/n)"
+    read computername
+    if [ "$computername" = "y" ]; then
+        setupmachinename
+    fi
+
     set_homebrew_prefix
     evaluate_brew
 
