@@ -57,7 +57,22 @@ setupssh() {
     fi
 }
 
+setupmachinename() {
+    echo "Enter your machine name (Ex: mercury, krypton, etc.)"
+    read machinename
+    sudo scutil --set ComputerName ${machinename}
+    sudo scutil --set HostName ${machinename}
+    sudo scutil --set LocalHostName ${machinename}
+    sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string ${machinename}
+}
+
 initialsetup() {
+    echo "Do you want to setup computer name? (y/n)"
+    read computername
+    if [ "$computername" = "y" ]; then
+        setupmachinename
+    fi
+
     set_homebrew_prefix
     evaluate_brew
 
@@ -73,9 +88,31 @@ initialsetup() {
     echo "Installing useful brew packages"
     # coreutils - https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x/21118126#21118126
     # act - https://github.com/nektos/act
-    brew install wget telnet ruby mvn go coreutils xmlstarlet act tree rustup-init az minikube kubectl kustomize hugo
+    brew install wget 
+    brew install telnet 
+    brew install ruby 
+    brew install mvn 
+    brew install go 
+    brew install coreutils 
+    brew install xmlstarlet 
+    brew install act 
+    brew install tree 
+    brew install rustup-init 
+    brew install az 
+    brew install minikube 
+    brew install kubectl 
+    brew install kustomize 
+    brew install hugo
+    brew install node
 
-    brew install --cask iterm2 visual-studio-code docker android-studio firefox spectacle microsoft-edge google-chrome powershell node
+    brew install --cask iterm2 
+    brew install --cask visual-studio-code 
+    brew install --cask docker android-studio 
+    brew install --cask firefox 
+    brew install --cask spectacle 
+    brew install --cask microsoft-edge 
+    brew install --cask google-chrome 
+    brew install --cask powershell
     brew install --cask anaconda
 
     echo "Initializing rustup"
