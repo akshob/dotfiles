@@ -106,12 +106,14 @@ initialsetup() {
     brew install node
 
     brew install --cask iterm2 
-    brew install --cask visual-studio-code 
-    brew install --cask docker android-studio 
-    brew install --cask firefox 
-    brew install --cask spectacle 
     brew install --cask microsoft-edge 
     brew install --cask google-chrome 
+    brew install --cask visual-studio-code 
+    brew install --cask docker
+    brew install --cask gimp
+    brew install --cask android-studio 
+    brew install --cask firefox 
+    brew install --cask spectacle 
     brew install --cask powershell
     brew install --cask anaconda
 
