@@ -116,6 +116,7 @@ initialsetup() {
     brew install --cask spectacle 
     brew install --cask powershell
     brew install --cask anaconda
+    brew install --cask halloy
 
     echo "Initializing rustup"
     rustup-init -y --no-modify-path
