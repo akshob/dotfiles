@@ -5,6 +5,7 @@ alias git-lblob="git rev-list --all --objects | git cat-file --batch-check='%(ob
 alias adb-restart="adb kill-server && adb start-server"
 alias pick="git cherry-pick -n"
 alias commit="git commit --no-edit"
+alias removenul="perl -pi -e 's/\x0//g'"
 
 # https://github.com/wtakuo/xv6-env
 alias xv6-create="docker run --name xv6 -dt -v $HOME/Projects/pdos-mit:/home/xv6/xv6-riscv wtakuo/xv6-env"
