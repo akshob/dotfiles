@@ -49,6 +49,10 @@ if [ -d "$HOME/.docker/bin" ]; then
     pathappend $HOME/.docker/bin PATH
 fi
 
+if [ -d "$HOME/.local/bin" ]; then
+    pathappend $HOME/.local/bin PATH
+fi
+
 /usr/libexec/java_home > /dev/null 2>&1
 if [ $? -eq 0 ]; then
     export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8.0)
