@@ -66,6 +66,15 @@ setupmachinename() {
     sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string ${machinename}
 }
 
+setupiterm2() {
+    echo "Install oh-my-zsh"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
+
+    wget "https://raw.githubusercontent.com/Raniconduh/zshfish/master/zshfish.zsh-theme" -P $HOME/.oh-my-zsh/custom/themes
+
+    cp $HOME/.shell/iterm2/iterm2-prefs.plist $HOME/Library/Preferences/com.googlecode.iterm2.plist
+}
+
 setupjenkins() {
     brew install jenkins
 
@@ -197,6 +206,10 @@ setupjenkins() {
     brew services restart jenkins
 }
 
+installwhisper() {
+    pipx install openai-whisper
+}
+
 initialsetup() {
     echo "Do you want to setup computer name? (y/n)"
     read computername
@@ -219,36 +232,11 @@ initialsetup() {
     echo "Installing useful brew packages"
     # coreutils - https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x/21118126#21118126
     # act - https://github.com/nektos/act
-    brew install wget 
-    brew install telnet 
-    brew install ruby 
-    brew install mvn 
-    brew install go 
-    brew install coreutils 
-    brew install xmlstarlet 
-    brew install act 
-    brew install tree 
-    brew install rustup-init 
-    brew install az 
-    brew install minikube 
-    brew install kubectl 
-    brew install kustomize 
-    brew install hugo
-    brew install node
-    brew install jenkins
+    brew tap "homebrew/bundle"
+    brew bundle install --file=$HOME/.shell/brew_file
 
-    brew install --cask iterm2 
-    brew install --cask microsoft-edge 
-    brew install --cask google-chrome 
-    brew install --cask visual-studio-code 
-    brew install --cask docker
-    brew install --cask gimp
-    brew install --cask android-studio 
-    brew install --cask firefox 
-    brew install --cask spectacle 
-    brew install --cask powershell
-    brew install --cask anaconda
-    brew install --cask halloy
+    echo "Setting up iterm2"
+    setupiterm2
 
     echo "Initializing rustup"
     rustup-init -y --no-modify-path
@@ -256,6 +244,12 @@ initialsetup() {
     echo "Deactivating anaconda base"
     # $HOMEBREW_PREFIX/anaconda3/bin/conda init $(echo $SHELL | cut -d '/' -f3)
     $HOMEBREW_PREFIX/anaconda3/bin/conda config --set auto_activate_base false
+
+    echo "Do you want to install openai-whisper? (y/n)"
+    read answer
+    if [ "$answer" = "y" ]; then
+        installwhisper
+    fi
 
     echo "Do you want to setup Jenkins? (y/n)"
     read answer
