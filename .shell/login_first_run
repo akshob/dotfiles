@@ -70,14 +70,9 @@ setupiterm2() {
     echo "Install oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
 
-    git clone https://github.com/powerline/fonts.git
-    chmod +x fonts/install.sh
-    sh fonts/install.sh
-    rm -rf fonts
-
     wget "https://raw.githubusercontent.com/Raniconduh/zshfish/master/zshfish.zsh-theme" -P $HOME/.oh-my-zsh/custom/themes
 
-    cp $HOME/.shell/iterm2/com.googlecode.iterm2.plist $HOME/Library/Preferences/com.googlecode.iterm2.plist
+    cp $HOME/.shell/iterm2/iterm2-prefs.plist $HOME/Library/Preferences/com.googlecode.iterm2.plist
 }
 
 setupjenkins() {
