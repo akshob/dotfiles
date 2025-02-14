@@ -72,7 +72,7 @@ setupiterm2() {
 
     wget "https://raw.githubusercontent.com/Raniconduh/zshfish/master/zshfish.zsh-theme" -P $HOME/.oh-my-zsh/custom/themes
 
-    cp $HOME/.shell/iterm2/iterm2-prefs.plist $HOME/Library/Preferences/com.googlecode.iterm2.plist
+    cp $HOME/.shell/iterm2-prefs.plist $HOME/Library/Preferences/com.googlecode.iterm2.plist
 }
 
 setupjenkins() {
