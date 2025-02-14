@@ -30,26 +30,6 @@ setupssh() {
         open https://github.com/settings/keys
     fi
 
-    echo "Do you want to setup Github Enterprise key? (y/n)"
-    read answer
-    if [ "$answer" = "y" ]; then
-        ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed_ghe -C "${USER}@${hostname}" -q -N ''
-        echo "Github Enterprise key generated. Press enter to open ghe"
-        read
-        pbcopy <~/.ssh/id_ed_ghe.pub
-        open https://ghe-us.microsoft.com/settings/keys
-    fi
-
-    echo "Do you want to setup VSTS key? (y/n)"
-    read answer
-    if [ "$answer" = "y" ]; then
-        ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa_vsts -C "$USER@${hostname}" -q -N ''
-        echo "Visual Studio key generated. Press enter to open vsts"
-        read
-        pbcopy <~/.ssh/id_rsa_vsts.pub
-        open https://office.visualstudio.com/_usersSettings/keys
-    fi
-
     echo "Do you want to setup passwordless ssh to a different machine? (y/n)"
     read answer
     if [ "$answer" = "y" ]; then
@@ -68,142 +48,11 @@ setupmachinename() {
 
 setupiterm2() {
     echo "Install oh-my-zsh"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc --unattended
 
     wget "https://raw.githubusercontent.com/Raniconduh/zshfish/master/zshfish.zsh-theme" -P $HOME/.oh-my-zsh/custom/themes
 
     cp $HOME/.shell/iterm2-prefs.plist $HOME/Library/Preferences/com.googlecode.iterm2.plist
-}
-
-setupjenkins() {
-    brew install jenkins
-
-    brew services start jenkins
-
-    echo "Waiting for jenkins service to start"
-    sleep 5
-
-    curl -sSL http://localhost:8080/ > /dev/null 2>&1
-
-    echo "Waiting for jenkins secrets to be created"
-    sleep 5
-
-    if [ ! -s $HOME/.jenkins/secrets/initialAdminPassword ]; then
-        echo "Initial admin password not found"
-        exit 1
-    fi
-
-    echo "Enter jenkins password for user $USER"
-    read -s jenkinsuserpass
-
-    adminpass=$(cat $HOME/.jenkins/secrets/initialAdminPassword)
-    echo "Creating jenkins user $USER"
-    echo "jenkins.model.Jenkins.instance.securityRealm.createAccount(\"$USER\", \"$jenkinsuserpass\")" | $HOMEBREW_PREFIX/opt/jenkins/bin/jenkins-cli -s http://localhost:8080/ -auth admin:$adminpass groovy =
-    echo "Setting initial setup completed"
-    echo "jenkins.install.InstallState.INITIAL_SETUP_COMPLETED.initializeState()" | $HOMEBREW_PREFIX/opt/jenkins/bin/jenkins-cli -s http://localhost:8080/ -auth admin:$adminpass groovy =
-    unset adminpass
-
-    # Getting a list of plugins from current jenkins installation
-    # curl -u username:xxx -sSL "$JENKINS_URL/pluginManager/api/xml?depth=1&xpath=/*/*/shortName|/*/*/version&wrapper=plugins" | perl -pe 's/.*?<shortName>([\w-]+).*?<version>([^<]+)()(<\/\w+>)+/\1 \2\n/g'|sed 's/ /:/' | cut -d':' -f1
-    echo "Installing plugins"
-    echo "
-    ionicons-api
-    cloudbees-folder
-    antisamy-markup-formatter
-    asm-api
-    json-path-api
-    structs
-    workflow-step-api
-    token-macro
-    build-timeout
-    credentials
-    plain-credentials
-    variant
-    ssh-credentials
-    credentials-binding
-    scm-api
-    workflow-api
-    commons-lang3-api
-    timestamper
-    caffeine-api
-    script-security
-    javax-activation-api
-    jaxb
-    snakeyaml-api
-    json-api
-    jackson2-api
-    commons-text-api
-    workflow-support
-    plugin-util-api
-    font-awesome-api
-    bootstrap5-api
-    jquery3-api
-    echarts-api
-    display-url-api
-    checks-api
-    junit
-    matrix-project
-    resource-disposer
-    ws-cleanup
-    pipeline-milestone-step
-    pipeline-build-step
-    workflow-scm-step
-    workflow-cps
-    pipeline-groovy-lib
-    pipeline-stage-step
-    joda-time-api
-    pipeline-model-api
-    workflow-job
-    pipeline-model-extensions
-    jakarta-activation-api
-    jakarta-mail-api
-    bouncycastle-api
-    instance-identity
-    mailer
-    branch-api
-    workflow-multibranch
-    durable-task
-    workflow-durable-task-step
-    pipeline-stage-tags-metadata
-    pipeline-input-step
-    apache-httpcomponents-client-4-api
-    workflow-basic-steps
-    pipeline-model-definition
-    javax-mail-api
-    workflow-aggregator
-    jjwt-api
-    okhttp-api
-    github-api
-    mina-sshd-api-common
-    mina-sshd-api-core
-    gson-api
-    eddsa-api
-    trilead-api
-    git-client
-    git
-    github
-    github-branch-source
-    pipeline-github-lib
-    pipeline-graph-analysis
-    metrics
-    pipeline-graph-view
-    ssh-slaves
-    matrix-auth
-    pam-auth
-    ldap
-    email-ext
-    theme-manager
-    dark-theme
-    htmlpublisher
-    " > $HOME/.jenkins/plugins.txt
-    cat $HOME/.jenkins/plugins.txt | tr -d "[:blank:]" | awk 'NF' | xargs -I{} $HOMEBREW_PREFIX/opt/jenkins/bin/jenkins-cli -s http://localhost:8080/ -auth $USER:$jenkinsuserpass install-plugin {} > /dev/null 2>&1
-
-    unset jenkinsuserpass
-
-    sed -i '' 's/127.0.0.1/0.0.0.0/g' $HOMEBREW_PREFIX/opt/jenkins/homebrew.mxcl.jenkins.plist
-    sed -i '' 's/8080/6437/g' $HOMEBREW_PREFIX/opt/jenkins/homebrew.mxcl.jenkins.plist
-    sed -i '' 's/<denyAnonymousReadAccess>true<\/denyAnonymousReadAccess>/<denyAnonymousReadAccess>false<\/denyAnonymousReadAccess>/g' $HOME/.jenkins/config.xml
-    brew services restart jenkins
 }
 
 installwhisper() {
@@ -241,21 +90,12 @@ initialsetup() {
     echo "Initializing rustup"
     rustup-init -y --no-modify-path
 
+    echo "Fixing conda permissions"
+    sudo chown -R akgop $HOME/.conda
+
     echo "Deactivating anaconda base"
     # $HOMEBREW_PREFIX/anaconda3/bin/conda init $(echo $SHELL | cut -d '/' -f3)
     $HOMEBREW_PREFIX/anaconda3/bin/conda config --set auto_activate_base false
-
-    echo "Do you want to install openai-whisper? (y/n)"
-    read answer
-    if [ "$answer" = "y" ]; then
-        installwhisper
-    fi
-
-    echo "Do you want to setup Jenkins? (y/n)"
-    read answer
-    if [ "$answer" = "y" ]; then
-        setupjenkins
-    fi
 
     echo "Do you want to setup ssh? (y/n)"
     read answer
