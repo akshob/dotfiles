@@ -91,7 +91,7 @@ initialsetup() {
     rustup-init -y --no-modify-path
 
     echo "Fixing conda permissions"
-    sudo chown -R akgop $HOME/.conda
+    sudo chown -R $USER $HOME/.conda
 
     echo "Deactivating anaconda base"
     # $HOMEBREW_PREFIX/anaconda3/bin/conda init $(echo $SHELL | cut -d '/' -f3)
