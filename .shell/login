@@ -24,7 +24,8 @@ if [ "$HOMEBREW_PREFIX" != "" ]; then
 
     if [ -r "$HOMEBREW_PREFIX/opt/ruby/bin/ruby" ]; then
         rv=$($HOMEBREW_PREFIX/opt/ruby/bin/ruby -v)
-        pathprepend $HOMEBREW_PREFIX/opt/ruby/bin:/usr/local/lib/ruby/gems/${rv:5:3}.0/bin PATH
+        pathprepend $HOMEBREW_PREFIX/opt/ruby/bin:$HOMEBREW_PREFIX/lib/ruby/gems/${rv:5:3}.0/bin PATH
+        unset rv
     fi
 
     if [ -r "$HOMEBREW_PREFIX/anaconda3/etc/profile.d/conda.sh" ]; then
